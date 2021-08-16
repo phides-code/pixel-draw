@@ -50,42 +50,99 @@ const Home = () => {
 
   return (
     <Wrapper>
-      <Grid id="grid">
-        {
-          grid.map(square => {
-            return (
-              <Square
-                id={square.num}
-                key={square.num}
-                style={{backgroundColor: square.color}}
-                onClick={fillColor}
-              />
-            )
-          })
-        }
-      </Grid>
-      <Palette>
-        {
-          palette.map(color => {
-            return (
-              <PaletteSquare
-                id={color}
-                key={color}
-                style={{backgroundColor: color}}
-                onClick={() =>{
-                  setSelectedColor(color);
-                  console.log(`set color ${color}`);
-                }}
-              />
-            )
-          })
-        }
-      </Palette>
+      <Canvas>
+        <Grid id="grid">
+          {
+            grid.map(square => {
+              return (
+                <Square
+                  id={square.num}
+                  key={square.num}
+                  style={{backgroundColor: square.color}}
+                  onClick={fillColor}
+                />
+              )
+            })
+          }
+        </Grid>
+        <Palette>
+          {
+            palette.map(color => {
+              return (
+                <PickerWrapper>
+                  <PaintBrush>
+                    {(selectedColor === color) && <>🖌</>}
+                  </PaintBrush>
+                  <ColorSquare
+                    id={color}
+                    key={color}
+                    style={{backgroundColor: color}}
+                    onClick={() =>{
+                      setSelectedColor(color);
+                      console.log(`set color ${color}`);
+                    }}
+                  />
+                </PickerWrapper>
+              )
+            })
+          }
+        </Palette>
+      </Canvas>
+      <Preview>
+        <MiniGrid id="minigrid">
+          {
+            grid.map(square => {
+              return (
+                <MiniSquare
+                  key={square.num}
+                  style={{backgroundColor: square.color}}
+                />
+              )
+            })
+          }
+        </MiniGrid>
+      </Preview>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+  display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: stretch;
+`;
+
+const Preview = styled.div`
+  border: 1px solid black;
+  margin-top: 10px;
+  border-radius: 5px;
+`;
+
+const MiniGrid = styled.div`
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	align-content: stretch;
+  max-width: 96px;
+`;
+
+const MiniSquare = styled.div`
+  height: 6px;
+  width: 6px;
+  display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+	align-content: stretch;
+`;
+
+const Canvas = styled.div`
   display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -97,9 +154,22 @@ const Wrapper = styled.div`
   border-radius: 5px;
 `;
 
-const Palette = styled.div`
-  margin-left: 64px;
+const PaintBrush = styled.div`
+  font-size: xx-large;
+  margin-right: 10px;
+`;
 
+const PickerWrapper = styled.div`
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	align-content: stretch;
+`;
+
+const Palette = styled.div`
+  margin-left: 32px;
 `;
 
 const Grid = styled.div`
@@ -130,7 +200,7 @@ const Square = styled.div`
   }
 `;
 
-const PaletteSquare = styled(Square)`
+const ColorSquare = styled(Square)`
   height: 48px;
   width: 48px;
 `;
